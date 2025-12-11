@@ -23,7 +23,4 @@ urlpatterns = [
     path('attendance/create/', views.attendance_create, name='attendance_create'),
     path('attendance/<int:pk>/update/', views.attendance_update, name='attendance_update'),
     path('attendance/<int:pk>/delete/', views.attendance_delete, name='attendance_delete'),
-    
-    # Reports (Extra Feature)
-    path('reports/', views.attendance_report, name='attendance_report'),
 ]
