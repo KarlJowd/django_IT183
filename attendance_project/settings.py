@@ -20,6 +20,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'https://*.cloudworkstations.dev',
     'https://*.googleusercontent.com',
+    'https://9000-firebase-it183utrera-1765488188905.cluster-d5vecjrg5rhlkrz6nm4jty7avc.cloudworkstations.dev',
 ]
 
 
