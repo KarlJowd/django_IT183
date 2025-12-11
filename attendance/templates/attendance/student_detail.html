@@ -1,0 +1,146 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}{{ student.get_full_name }} - Student Details{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'student_list' %}">Students</a></li>
+                <li class="breadcrumb-item active">{{ student.student_id }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="h2"><i class="bi bi-person-badge"></i> {{ student.get_full_name }}</h1>
+        <p class="text-muted">Student ID: {{ student.student_id }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'student_update' student.pk %}" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Edit
+        </a>
+        <a href="{% url 'student_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Student Information</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Student ID:</dt>
+                    <dd class="col-sm-7">{{ student.student_id }}</dd>
+                    
+                    <dt class="col-sm-5">Full Name:</dt>
+                    <dd class="col-sm-7">{{ student.get_full_name }}</dd>
+                    
+                    <dt class="col-sm-5">Course/Year:</dt>
+                    <dd class="col-sm-7">{{ student.course_or_year_level }}</dd>
+                    
+                    <dt class="col-sm-5">Status:</dt>
+                    <dd class="col-sm-7">
+                        {% if student.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Attendance Statistics</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Total Records:</dt>
+                    <dd class="col-sm-7"><strong>{{ total_records }}</strong></dd>
+                    
+                    <dt class="col-sm-5">Present:</dt>
+                    <dd class="col-sm-7"><span class="badge bg-success">{{ present_count }}</span></dd>
+                    
+                    <dt class="col-sm-5">Absent:</dt>
+                    <dd class="col-sm-7"><span class="badge bg-danger">{{ absent_count }}</span></dd>
+                    
+                    <dt class="col-sm-5">Late:</dt>
+                    <dd class="col-sm-7"><span class="badge bg-warning">{{ late_count }}</span></dd>
+                    
+                    <dt class="col-sm-5">Excused:</dt>
+                    <dd class="col-sm-7"><span class="badge bg-info">{{ excused_count }}</span></dd>
+                    
+                    <dt class="col-sm-5">Attendance %:</dt>
+                    <dd class="col-sm-7">
+                        <strong class="{% if attendance_percentage >= 75 %}text-success{% elif attendance_percentage >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                            {{ attendance_percentage }}%
+                        </strong>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Attendance Records</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_attendance %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Class</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in recent_attendance %}
+                                <tr>
+                                    <td>{{ record.date|date:"M d, Y" }}</td>
+                                    <td>{{ record.classroom.code }} - {{ record.classroom.name }}</td>
+                                    <td>
+                                        {% if record.status == 'PRESENT' %}
+                                            <span class="badge bg-success">{{ record.get_status_display }}</span>
+                                        {% elif record.status == 'ABSENT' %}
+                                            <span class="badge bg-danger">{{ record.get_status_display }}</span>
+                                        {% elif record.status == 'LATE' %}
+                                            <span class="badge bg-warning text-dark">{{ record.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-info">{{ record.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ record.remarks|default:"-" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        No attendance records for this student yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

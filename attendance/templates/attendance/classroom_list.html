@@ -1,0 +1,73 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Classrooms{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h1 class="h2"><i class="bi bi-building"></i> Classrooms</h1>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'classroom_create' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Classroom
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">All Classrooms ({{ classrooms.count }})</h5>
+            </div>
+            <div class="card-body">
+                {% if classrooms %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Schedule</th>
+                                    <th>Teacher</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for classroom in classrooms %}
+                                <tr>
+                                    <td><strong>{{ classroom.code }}</strong></td>
+                                    <td>{{ classroom.name }}</td>
+                                    <td>{{ classroom.schedule }}</td>
+                                    <td>{{ classroom.teacher_name }}</td>
+                                    <td>
+                                        {% if classroom.is_active %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'classroom_update' classroom.pk %}" class="btn btn-sm btn-warning btn-action">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="{% url 'classroom_delete' classroom.pk %}" class="btn btn-sm btn-danger btn-action">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mb-0">
+                        No classrooms found. Click "Add New Classroom" to create one.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
