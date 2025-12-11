@@ -10,16 +10,16 @@
   idx.workspace.onCreate = {
     install-deps = "pip install -r requirements.txt";
   };
+  idx.workspace.onStart = {
+    install-deps = "pip install -r requirements.txt";
+  };
   idx.previews = {
     previews = {
       web = {
         command = [
-          "python"
-          "manage.py"
-          "runserver"
-          "0.0.0.0:$PORT"
-          "--noreload"
-          "--insecure"
+          "sh"
+          "-c"
+          "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:$PORT --noreload --insecure"
         ];
         manager = "web";
       };
