@@ -16,6 +16,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# CSRF trusted origins for Google IDX and other cloud environments
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.cloudworkstations.dev',
+    'https://*.googleusercontent.com',
+]
+
 
 # Application definition
 
