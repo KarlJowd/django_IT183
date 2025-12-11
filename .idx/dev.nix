@@ -7,10 +7,7 @@
     "ms-python.python"
   ];
   idx.workspace.onCreate = {
-    create-venv = "python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt";
-  };
-  idx.workspace.onStart = {
-    activate-venv = "source .venv/bin/activate";
+    create-venv = "python -m venv .venv && .venv/bin/pip install -r requirements.txt";
   };
   idx.previews = {
     previews = {
@@ -18,7 +15,7 @@
         command = [
           "sh"
           "-c"
-          "source .venv/bin/activate && python manage.py runserver 0.0.0.0:$PORT --noreload --insecure"
+          "if [ ! -d .venv ]; then python -m venv .venv && .venv/bin/pip install -r requirements.txt; fi && .venv/bin/python manage.py runserver 0.0.0.0:$PORT --noreload --insecure"
         ];
         manager = "web";
       };
