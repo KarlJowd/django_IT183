@@ -2,16 +2,15 @@
   channel = "stable-24.05";
   packages = [
     pkgs.python312
-    pkgs.python312Packages.pip
   ];
   idx.extensions = [
     "ms-python.python"
   ];
   idx.workspace.onCreate = {
-    install-deps = "pip install -r requirements.txt";
+    create-venv = "python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt";
   };
   idx.workspace.onStart = {
-    install-deps = "pip install -r requirements.txt";
+    activate-venv = "source .venv/bin/activate";
   };
   idx.previews = {
     previews = {
@@ -19,7 +18,7 @@
         command = [
           "sh"
           "-c"
-          "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:$PORT --noreload --insecure"
+          "source .venv/bin/activate && python manage.py runserver 0.0.0.0:$PORT --noreload --insecure"
         ];
         manager = "web";
       };
